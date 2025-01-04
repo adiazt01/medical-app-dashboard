@@ -11,6 +11,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar'
+import { Toaster } from '@/components/ui/toaster'
 import { SidebarDashboard } from '@/modules/core/components/sidebar/sidebar-dashboard'
 import { Separator } from '@radix-ui/react-separator'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
@@ -22,6 +23,7 @@ export const Route = createFileRoute('/dashboard')({
 function LayoutComponent() {
   return (
     <SidebarProvider>
+      <Toaster />
       <SidebarDashboard />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
