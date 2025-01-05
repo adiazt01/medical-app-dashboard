@@ -14,10 +14,22 @@ import {
 import { Toaster } from '@/components/ui/toaster'
 import { SidebarDashboard } from '@/modules/core/components/sidebar/sidebar-dashboard'
 import { Separator } from '@radix-ui/react-separator'
-import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import React from 'react'
-
 export const Route = createFileRoute('/dashboard')({
+  beforeLoad: ({
+    context: {
+      auth
+    }
+  }) => {
+    const token = auth.isAuthenticated
+    
+    if (!token) {
+      throw redirect({
+        to: '/auth/login',
+      })
+    }
+  },
   component: LayoutComponent,
 })
 
@@ -30,7 +42,7 @@ function LayoutComponent() {
     <SidebarProvider>
       <Toaster />
       <SidebarDashboard />
-      <SidebarInset>
+      <SidebarInset className='overflow-hidden flex flex-col relative border'>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
@@ -55,9 +67,9 @@ function LayoutComponent() {
             </Breadcrumb>
           </div>
         </header>
-        <body className="flex-1 p-4">
+        <main className="p-4">
           <Outlet />
-        </body>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   )

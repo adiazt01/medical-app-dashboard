@@ -1,17 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useContext } from 'react'
-import { AuthContext } from '../../modules/auth/context/auth-context'
-import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Search } from 'lucide-react'
+import { useAuth } from '@/modules/auth/hooks/useAuth'
 
 export const Route = createFileRoute('/dashboard/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { state, login } = useContext(AuthContext)
+  const { accessTokenData } = useAuth()
 
   return (
     <>

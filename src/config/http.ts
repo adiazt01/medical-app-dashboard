@@ -7,6 +7,19 @@ const axiosInstance: AxiosInstance = axios.create({
     },
 });
 
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 export const get = async <T>(url: string): Promise<T> => {
     const response = await axiosInstance.get<T>(url);
     return response.data;

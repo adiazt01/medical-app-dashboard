@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormControl, FormDescription, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm } from "@tanstack/react-form";
 import type { FieldApi } from "@tanstack/react-form";
+import { useState } from "react";
+import * as z from "zod";
+import { login } from "../../services/auth-api";
+import { useNavigate } from "@tanstack/react-router";
+import { useAuth } from "../../hooks/useAuth";
 
 function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
   return (
@@ -17,14 +20,34 @@ function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
   );
 }
 
+const adminLoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
 export function LoginForm() {
+  const navigate = useNavigate()
+  const { setAccessToken } = useAuth()
+
   const form = useForm({
     defaultValues: {
       email: "",
+      password: "",
     },
-    onSubmit: async ({ value }) => {
-      // Do something with the form values.
-      console.log(value);
+    validators: {
+      onSubmit: adminLoginSchema,
+    },
+    onSubmit: async ({ value, formApi }) => {
+      try {
+        const accessToken = await login(value.email, value.password)
+        setAccessToken(accessToken.access_token);
+        navigate({
+          to: "/dashboard"
+        })
+        console.log(accessToken)
+      } catch (error) {
+        console.log(error)
+      }
     },
   });
 
@@ -49,14 +72,6 @@ export function LoginForm() {
               <div className="grid gap-2">
                 <form.Field
                   name="email"
-                  validators={{
-                    onChange: ({ value }) =>
-                      !value
-                        ? 'An email is required'
-                        : !/\S+@\S+\.\S+/.test(value)
-                          ? 'Email is invalid'
-                          : undefined,
-                  }}
                   children={(field) => (
                     <>
                       <Input
@@ -71,7 +86,20 @@ export function LoginForm() {
                 />
               </div>
               <div className="grid gap-2">
-
+                <form.Field
+                  name="password"
+                  children={(field) => (
+                    <>
+                      <Input
+                        placeholder="password"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      <FieldInfo field={field} />
+                    </>
+                  )}
+                />
               </div>
               <Button type="submit" className="w-full">
                 Login

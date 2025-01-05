@@ -1,53 +1,68 @@
-import { QueryClient, useMutation } from "@tanstack/react-query";
-import { createContext, useReducer } from "react";
-import { login as loginApi } from '../services/auth-api';
+import React, { createContext, useState, ReactNode, useEffect, useCallback } from 'react';
+import { z } from 'zod';
+import {jwtDecode} from 'jwt-decode';
 
+const TokenDataSchema = z.object({
+  email: z.string(),
+  sub: z.number(),
+  permission: z.string(),
+  userType: z.string(),
+});
 
-interface AuthState {
-    user: any;
+type TokenData = z.infer<typeof TokenDataSchema>;
+
+interface AuthContextType {
+  accessToken?: string | null;
+  accessTokenData?: TokenData | null;
+  isAuthenticated: boolean;
+  setAccessToken: (accessToken: string | undefined) => void;
+  clearTokens: () => void;
 }
 
-interface AuthAction {
-    type: 'login' | 'logout'
-    payload?: any
-}
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const initialState: AuthState = {
-    user: null,
-};
+export const decodeAccessToken = (accessToken: string) => TokenDataSchema.parse(jwtDecode<TokenData>(accessToken));
 
-export const AuthContext = createContext<any>(null)
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [accessToken, setAccessTokenState] = useState<string | undefined>(undefined);
+  const [accessTokenData, setAccessTokenData] = useState<TokenData | undefined>(undefined);
 
-const authReducer = (state: AuthState, action: AuthAction): AuthState => {
-    switch (action.type) {
-        case 'login':
-            return { ...state, user: action.payload };
-        case 'logout':
-            return { ...state, user: null };
-        default:
-            return state;
+  const setAccessToken = useCallback((token: string | undefined) => {
+    const tokenData = (() => {
+      try {
+        return token ? decodeAccessToken(token) : undefined;
+      } catch (error) {
+        console.error('Failed to decode token', error);
+        return undefined;
+      }
+    })();
+    setAccessTokenState(token);
+    setAccessTokenData(tokenData);
+    if (token) {
+      localStorage.setItem('accessToken', token);
+    } else {
+      localStorage.removeItem('accessToken');
     }
-};
+  }, []);
 
-export const AuthProvider = ({ children }: {
-    children: React.ReactNode
-}) => {
-    const [state, dispatch] = useReducer(authReducer, initialState);
+  const clearTokens = useCallback(() => {
+    localStorage.removeItem('accessToken');
+    setAccessTokenState(undefined);
+    setAccessTokenData(undefined);
+  }, []);
 
-    const login = (email: string, password: string) => {
-        const mutation = useMutation({
-            mutationFn: () => loginApi(email, password),
-            onSuccess: (data) => {
-                dispatch({ type: 'login', payload: data });
-            },
-        })
-        console.log(`mutation`, mutation)
-        return mutation;
+  const isAuthenticated = localStorage.getItem('accessToken') !== null;
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      setAccessToken(token);
     }
+  }, [setAccessToken]);
 
-    return (
-        <AuthContext.Provider value={{ state, login }}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
+  return (
+    <AuthContext.Provider value={{ accessToken, accessTokenData, isAuthenticated, setAccessToken, clearTokens }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
