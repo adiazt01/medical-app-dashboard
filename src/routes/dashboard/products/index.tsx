@@ -5,7 +5,17 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useQuery } from '@tanstack/react-query'
 import { getMedicines } from '@/modules/products/services/medicine-api'
 import { Button } from '@/components/ui/button'
-import { Car, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { CreateProductDialog } from '@/modules/products/components/dialog/create-product-dialog'
+
 
 export const Route = createFileRoute('/dashboard/products/')({
   component: RouteComponent,
@@ -25,10 +35,7 @@ function RouteComponent() {
           <CardDescription>Administra tus productos</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button>
-            <Plus />
-            Crear producto
-          </Button>
+          <CreateProductDialog />
         </CardContent>
       </Card>
       <Card>
