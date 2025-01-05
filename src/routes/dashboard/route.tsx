@@ -55,7 +55,9 @@ function LayoutComponent() {
             </Breadcrumb>
           </div>
         </header>
-        <Outlet />
+        <body className="flex-1 p-4">
+          <Outlet />
+        </body>
       </SidebarInset>
     </SidebarProvider>
   )
