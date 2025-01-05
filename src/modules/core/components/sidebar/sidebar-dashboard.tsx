@@ -2,6 +2,7 @@ import {
     AudioWaveform,
     BookOpen,
     Bot,
+    BriefcaseMedical,
     Command,
     Frame,
     GalleryVerticalEnd,
@@ -29,9 +30,9 @@ const data = {
   },
   navMain: [
     {
-      title: "Playground",
+      title: "Productos",
       url: "#",
-      icon: SquareTerminal,
+      icon: BriefcaseMedical,
       isActive: true,
       items: [
         {
