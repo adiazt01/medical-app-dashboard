@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { useForm } from "@tanstack/react-form";
 import type { FieldApi } from "@tanstack/react-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as z from "zod";
 import { login } from "../../services/auth-api";
 import { useNavigate } from "@tanstack/react-router";
@@ -27,7 +27,7 @@ const adminLoginSchema = z.object({
 
 export function LoginForm() {
   const navigate = useNavigate()
-  const { setAccessToken } = useAuth()
+  const { setAccessToken, accessTokenData } = useAuth()
 
   const form = useForm({
     defaultValues: {
@@ -40,16 +40,24 @@ export function LoginForm() {
     onSubmit: async ({ value, formApi }) => {
       try {
         const accessToken = await login(value.email, value.password)
-        setAccessToken(accessToken.access_token);
-        navigate({
-          to: "/dashboard"
-        })
+        setAccessToken(accessToken.accessToken);
         console.log(accessToken)
       } catch (error) {
         console.log(error)
       }
     },
   });
+
+  useEffect(() => {
+    if (accessTokenData) {
+      navigate({
+        to: '/dashboard'
+      })
+    }
+  }
+  , [accessTokenData])
+
+
 
   return (
     <div className="flex flex-col gap-6">
