@@ -1,12 +1,15 @@
 import React, { createContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { z } from 'zod';
 import {jwtDecode} from 'jwt-decode';
+import exp from 'constants';
 
 const TokenDataSchema = z.object({
   email: z.string(),
   sub: z.number(),
   permission: z.string(),
   userType: z.string(),
+  exp: z.number(),
+  iat: z.number(),
 });
 
 type TokenData = z.infer<typeof TokenDataSchema>;
@@ -21,7 +24,13 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const decodeAccessToken = (accessToken: string) => TokenDataSchema.parse(jwtDecode<TokenData>(accessToken));
+export const decodeAccessToken = (accessToken: string) => {
+  const tokenData = TokenDataSchema.parse(jwtDecode<TokenData>(accessToken));
+  if (tokenData.exp * 1000 < Date.now()) {
+    throw new Error('Token has expired');
+  }
+  return tokenData;
+};
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [accessToken, setAccessTokenState] = useState<string | undefined>(undefined);
@@ -56,7 +65,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      setAccessToken(token);
+      try {
+        setAccessToken(token);
+      } catch (error) {
+        // TODO: Handle token errors
+        if (error.message === 'Token has expired') {
+          return clearTokens();
+        }
+      }
     }
   }, [setAccessToken]);
 
