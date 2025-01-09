@@ -1,17 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useForm } from "@tanstack/react-form";
 import type { FieldApi } from "@tanstack/react-form";
-import { useEffect } from "react";
-import { login } from "../../services/auth-api";
-import { useNavigate } from "@tanstack/react-router";
-import { useAuth } from "../../hooks/useAuth";
-import { adminLoginSchema } from "../../schemas/auth-schemas";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
+import { useLoginForm } from "../../hooks/useLoginForm";
 
 function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
   return (
@@ -24,64 +17,7 @@ function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
 }
 
 export function LoginForm() {
-  const navigate = useNavigate()
-  const { setAccessToken, accessTokenData } = useAuth()
-  const { toast } = useToast();
-
-  const loginUserMutation = useMutation({
-    mutationFn: async (data: {
-      email: string;
-      password: string;
-    }) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return login(data.email, data.password)
-    }
-  })
-
-  const form = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-    validators: {
-      onSubmit: adminLoginSchema,
-      onBlur: adminLoginSchema,
-    },
-    onSubmit: async ({ value }) => {
-      try {
-        const accessToken = await loginUserMutation.mutateAsync(value);
-        setAccessToken(accessToken.accessToken);
-        toast({
-          title: 'Inicio de sesión exitoso',
-          description: 'Bienvenido al panel de administración',
-        })
-      } catch (error) {
-        toast({
-          title: 'Error al iniciar sesión',
-          description: 'Verifique sus credenciales e intente nuevamente',
-          variant: 'destructive'
-        })
-      }
-    },
-    onSubmitInvalid: () => {
-      toast({
-        title: 'Ocurrio un error al iniciar sesión',
-        description: 'El servidor no pudo procesar la solicitud',
-        variant: 'destructive'
-      })
-    }
-  });
-
-  useEffect(() => {
-    if (accessTokenData) {
-      navigate({
-        to: '/dashboard'
-      })
-    }
-  }
-    , [accessTokenData])
-
-
+  const { form, loginUserMutation } = useLoginForm();
 
   return (
     <div className="flex flex-col gap-6">

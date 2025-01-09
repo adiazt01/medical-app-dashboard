@@ -1,4 +1,4 @@
-import { LoginForm } from '@/modules/auth/components/form/LoginForm'
+import { LoginForm } from '@/modules/auth/components/form/login-form'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/auth/login')({
