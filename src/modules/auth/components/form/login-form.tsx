@@ -1,20 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import type { FieldApi } from "@tanstack/react-form";
 import { Label } from "@/components/ui/label";
 import { Loader } from "lucide-react";
 import { useLoginForm } from "../../hooks/useLoginForm";
-
-function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
-  return (
-    <>
-      {field.state.meta.isTouched && field.state.meta.errors.length ? (
-        <small className="ml-2 text-sm text-red-500 font-medium leading-none">{field.state.meta.errors.join(", ")}</small>
-      ) : null}
-    </>
-  );
-}
+import { FieldInfo } from "@/modules/core/components/input/form-info";
 
 export function LoginForm() {
   const { form, loginUserMutation } = useLoginForm();
