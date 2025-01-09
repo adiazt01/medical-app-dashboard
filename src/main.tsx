@@ -3,6 +3,7 @@ import "./index.css"
 import { router } from './router'
 import { App } from './app'
 import { AuthProvider } from './modules/auth/context/auth-context'
+import { Toaster } from './components/ui/toaster'
 
 // Register things for typesafety
 declare module '@tanstack/react-router' {
@@ -18,6 +19,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <AuthProvider>
       <App />
+      <Toaster />
     </AuthProvider>
   )
 }

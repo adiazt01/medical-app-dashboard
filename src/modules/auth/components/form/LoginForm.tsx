@@ -3,31 +3,40 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { useForm } from "@tanstack/react-form";
 import type { FieldApi } from "@tanstack/react-form";
-import { useEffect, useState } from "react";
-import * as z from "zod";
+import { useEffect } from "react";
 import { login } from "../../services/auth-api";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../hooks/useAuth";
+import { adminLoginSchema } from "../../schemas/auth-schemas";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
 
 function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
   return (
     <>
       {field.state.meta.isTouched && field.state.meta.errors.length ? (
-        <em>{field.state.meta.errors.join(", ")}</em>
+        <small className="ml-2 text-sm text-red-500 font-medium leading-none">{field.state.meta.errors.join(", ")}</small>
       ) : null}
-      {field.state.meta.isValidating ? 'Validating...' : null}
     </>
   );
 }
 
-const adminLoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
 export function LoginForm() {
   const navigate = useNavigate()
   const { setAccessToken, accessTokenData } = useAuth()
+  const { toast } = useToast();
+
+  const loginUserMutation = useMutation({
+    mutationFn: async (data: {
+      email: string;
+      password: string;
+    }) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return login(data.email, data.password)
+    }
+  })
 
   const form = useForm({
     defaultValues: {
@@ -36,14 +45,24 @@ export function LoginForm() {
     },
     validators: {
       onSubmit: adminLoginSchema,
+      onBlur: adminLoginSchema,
     },
-    onSubmit: async ({ value, formApi }) => {
+    onSubmit: async ({ value }) => {
       try {
-        const accessToken = await login(value.email, value.password)
+        const accessToken = await loginUserMutation.mutateAsync(value);
         setAccessToken(accessToken.accessToken);
-        console.log(accessToken)
-      } catch (error) {
-        console.log(error)
+        toast({
+          title: 'Inicio de sesión exitoso',
+          description: 'Bienvenido al panel de administración',
+        })
+      } catch (error) {￼
+        ￼
+        subscribed
+        toast({
+          title: 'Error al iniciar sesión',
+          description: 'Verifique sus credenciales e intente nuevamente',
+          variant: 'destructive'
+        })
       }
     },
   });
@@ -55,7 +74,7 @@ export function LoginForm() {
       })
     }
   }
-  , [accessTokenData])
+    , [accessTokenData])
 
 
 
@@ -63,9 +82,11 @@ export function LoginForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">
+            Iniciar sesión
+          </CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Ingrese sus credenciales para acceder al panel de administración
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -81,15 +102,18 @@ export function LoginForm() {
                 <form.Field
                   name="email"
                   children={(field) => (
-                    <>
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <Label htmlFor="email">Email</Label>
                       <Input
-                        placeholder="email"
+                        placeholder="email@mail.com"
+                        id="email"
+                        disabled={loginUserMutation.isPending}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
                       <FieldInfo field={field} />
-                    </>
+                    </div>
                   )}
                 />
               </div>
@@ -97,27 +121,29 @@ export function LoginForm() {
                 <form.Field
                   name="password"
                   children={(field) => (
-                    <>
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <Label htmlFor="password">Contraseña</Label>
                       <Input
+                        disabled={loginUserMutation.isPending}
                         placeholder="password"
+                        type="password"
+                        id="********"
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
                       <FieldInfo field={field} />
-                    </>
+                    </div>
                   )}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              <Button
+                disabled={loginUserMutation.isPending}
+                type="submit" className="w-full">
+                {loginUserMutation.isPending ?
+                  <Loader className="w-6 animate-spin h-6" />
+                  : 'Iniciar sesión'}
               </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
             </div>
           </form>
         </CardContent>

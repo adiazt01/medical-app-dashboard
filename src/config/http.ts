@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: 'http://localhost:3000',
@@ -26,9 +26,10 @@ export const get = async <T>(url: string): Promise<T> => {
 };
 
 export const post = async <T>(url: string, data: any): Promise<T> => {
-    const response = await axiosInstance.post<T>(url, data);
+    const response: AxiosResponse<T> = await axiosInstance.post<T>(url, data);
     return response.data;
 };
+
 
 export const put = async <T>(url: string, data: any): Promise<T> => {
     const response = await axiosInstance.put<T>(url, data);
