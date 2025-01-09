@@ -55,9 +55,7 @@ export function LoginForm() {
           title: 'Inicio de sesión exitoso',
           description: 'Bienvenido al panel de administración',
         })
-      } catch (error) {￼
-        ￼
-        subscribed
+      } catch (error) {
         toast({
           title: 'Error al iniciar sesión',
           description: 'Verifique sus credenciales e intente nuevamente',
@@ -65,6 +63,13 @@ export function LoginForm() {
         })
       }
     },
+    onSubmitInvalid: () => {
+      toast({
+        title: 'Ocurrio un error al iniciar sesión',
+        description: 'El servidor no pudo procesar la solicitud',
+        variant: 'destructive'
+      })
+    }
   });
 
   useEffect(() => {
