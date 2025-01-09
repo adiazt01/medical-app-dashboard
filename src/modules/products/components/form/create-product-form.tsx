@@ -7,24 +7,24 @@ import { useQuery } from "@tanstack/react-query";
 import { getPresentations } from "../../services/presentation-api";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getMainComponents } from "../../services/main-component-api";
-
+import { getTherapeuticActions } from "../../services/therapeutic-action-api";
 
 export function CreateProductForm() {
   const query = useQuery({
     queryKey: ['presentations'],
     queryFn: async () => {
-      const [presentations, mainComponents] = await Promise.all([
+      const [presentations, mainComponents, therapeuticActions] = await Promise.all([
         getPresentations(),
-        getMainComponents()
+        getMainComponents(),
+        getTherapeuticActions()
       ])
       return {
         presentations,
-        mainComponents
+        mainComponents,
+        therapeuticActions
       }
     }
   })
-
-  console.log(query)
 
   const form = useForm({
     defaultValues: {
@@ -106,6 +106,34 @@ export function CreateProductForm() {
             )}
           />
         </div>
+        <div className="grid gap-2">
+          <form.Field
+            name="therapeuticActionId"
+            children={(field) => (
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="name">
+                  Acción terapéutica
+                </Label>
+                <Select
+                  onValueChange={(e) => 
+                    field.handleChange(Number(e))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccione una acción terapéutica" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {query?.data?.therapeuticActions.map((therapeuticAction) => (
+                      <SelectItem key={therapeuticAction.id} value={therapeuticAction.name}>
+                        {therapeuticAction.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          />
+          </div>
         <Button type="submit" className="w-full">
           Login
         </Button>
