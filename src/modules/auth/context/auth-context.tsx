@@ -1,7 +1,6 @@
 import React, { createContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { z } from 'zod';
 import {jwtDecode} from 'jwt-decode';
-import exp from 'constants';
 
 const TokenDataSchema = z.object({
   email: z.string(),
@@ -66,15 +65,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const token = localStorage.getItem('accessToken');
     if (token) {
       try {
-        setAccessToken(token);
-      } catch (error) {
-        // TODO: Handle token errors
-        if (error.message === 'Token has expired') {
-          return clearTokens();
+        const tokenData = decodeAccessToken(token);
+        if (tokenData.exp * 1000 < Date.now()) {
+          clearTokens();
+        } else {
+          setAccessToken(token);
         }
+      } catch (error) {
+        clearTokens();
       }
     }
-  }, [setAccessToken]);
+  }, [setAccessToken, clearTokens]);
 
   return (
     <AuthContext.Provider value={{ accessToken, accessTokenData, isAuthenticated, setAccessToken, clearTokens }}>
