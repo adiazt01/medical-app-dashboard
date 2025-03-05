@@ -45,6 +45,7 @@ export function useLoginForm() {
       onBlur: adminLoginSchema,
     },
     onSubmit: ({ value }) => {
+      console.log(value)
       loginUserMutation.mutate(value);
     },
   });

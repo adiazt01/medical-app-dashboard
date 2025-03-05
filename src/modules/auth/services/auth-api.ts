@@ -3,6 +3,7 @@ import { ISignInResponse, ISignUpResponse } from "../interfaces/auth-interfaces"
 
 export const login = async (email: string, password: string) => {
     const data = { email, password };
+    console.log(data);
     const response: ISignInResponse = await post('/hub/auth/sign-in', data);
 
     if (!response.access_token) {

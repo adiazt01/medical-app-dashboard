@@ -1,6 +1,5 @@
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import { ColumnDef } from "@tanstack/react-table"
-import { Book, Camera, DollarSign, Hash, Heart, Info, PillBottle, Tablets } from "lucide-react"
 
 export type product = {
   id: number

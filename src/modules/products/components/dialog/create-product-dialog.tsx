@@ -4,7 +4,6 @@ import { Plus } from "lucide-react";
 import { CreateProductForm } from "../form/create-product-form";
 
 export function CreateProductDialog() {
-
   return (
     <Dialog>
       <DialogTrigger>

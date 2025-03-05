@@ -67,7 +67,7 @@ function LayoutComponent() {
             </Breadcrumb>
           </div>
         </header>
-        <main className="p-4">
+        <main className="p-4 h-full">
           <Outlet />
         </main>
       </SidebarInset>
