@@ -29,13 +29,12 @@ export const columns: ColumnDef<product>[] = [
   {
     header: () => <div>
       <p className="mr-2">
-
         Imagen
       </p>
     </div>,
     cell: ({ row }) => {
-      return (<AspectRatio ratio={16 / 9}>
-        <img src={row.original.file.url} alt="product" className="mx-auto rounded-md object-cover" />
+      return (<AspectRatio ratio={4/3} className="rounded-md border overflow-hidden max-w-20 max-h-20">
+        <img src={row.original.file.url} alt="product" className="mx-auto h-full overflow-hidden object-cover object-center" />
       </AspectRatio>)
     },
     accessorKey: 'file.url',

@@ -16,16 +16,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: TData[] | [];
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
@@ -40,37 +42,50 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex gap-4 h-full flex-col">
-      <Input
-        placeholder="Search"
-        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn("name")?.setFilterValue(event.target.value)
-        }
-        className="max-w-sm"
-      />
-      <div className="rounded-md h-full border">
-        <Table className="flex-col overflow-scroll">
-          <TableHeader>
+    <div className="flex-1 flex gap-4 flex-col">
+      <div className="flex-1 flex min-h-[25rem] h-full flex-col gap-4">
+        <Table className="border rounded-lg">
+          <TableHeader className="sticky top-0 z-10 bg-white">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <>
+                <TableRow>
+                  <TableCell colSpan={columns.length}>
+                    <Skeleton className="h-10 w-full" />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell colSpan={columns.length}>
+                    <Skeleton className="h-10 w-full" />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell colSpan={columns.length}>
+                    <Skeleton className="h-10 w-full" />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell colSpan={columns.length}>
+                    <Skeleton className="h-10 w-full" />
+                  </TableCell>
+                </TableRow>
+              </>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

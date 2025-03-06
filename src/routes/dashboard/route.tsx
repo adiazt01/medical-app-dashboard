@@ -39,11 +39,11 @@ function LayoutComponent() {
   const params = url.split('/').filter((param) => param !== '')
 
   return (
-    <SidebarProvider>
+     <SidebarProvider>
       <Toaster />
       <SidebarDashboard />
-      <SidebarInset className='overflow-hidden flex flex-col relative border'>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+      <SidebarInset className='flex flex-col p-4 overflow-hidden w-full h-full relative min-h-screen max-h-screen'>
+        <header className="h-16 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
@@ -67,7 +67,7 @@ function LayoutComponent() {
             </Breadcrumb>
           </div>
         </header>
-        <main className="p-4 h-full">
+        <main className="flex-1 h-full flex flex-col overflow-auto">
           <Outlet />
         </main>
       </SidebarInset>
