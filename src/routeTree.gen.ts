@@ -16,6 +16,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as DashboardUsersIndexImport } from './routes/dashboard/users/index'
 import { Route as DashboardSettingsIndexImport } from './routes/dashboard/settings/index'
 import { Route as DashboardProductsIndexImport } from './routes/dashboard/products/index'
 import { Route as DashboardProductsNewIndexImport } from './routes/dashboard/products/new/index'
@@ -50,6 +51,12 @@ const AuthLoginRoute = AuthLoginImport.update({
   id: '/auth/login',
   path: '/auth/login',
   getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardUsersIndexRoute = DashboardUsersIndexImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 
 const DashboardSettingsIndexRoute = DashboardSettingsIndexImport.update({
@@ -123,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSettingsIndexImport
       parentRoute: typeof DashboardRouteImport
     }
+    '/dashboard/users/': {
+      id: '/dashboard/users/'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof DashboardUsersIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
     '/dashboard/products/new/': {
       id: '/dashboard/products/new/'
       path: '/products/new'
@@ -139,6 +153,7 @@ interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardProductsIndexRoute: typeof DashboardProductsIndexRoute
   DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute
+  DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
   DashboardProductsNewIndexRoute: typeof DashboardProductsNewIndexRoute
 }
 
@@ -146,6 +161,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardProductsIndexRoute: DashboardProductsIndexRoute,
   DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,
+  DashboardUsersIndexRoute: DashboardUsersIndexRoute,
   DashboardProductsNewIndexRoute: DashboardProductsNewIndexRoute,
 }
 
@@ -161,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/products': typeof DashboardProductsIndexRoute
   '/dashboard/settings': typeof DashboardSettingsIndexRoute
+  '/dashboard/users': typeof DashboardUsersIndexRoute
   '/dashboard/products/new': typeof DashboardProductsNewIndexRoute
 }
 
@@ -171,6 +188,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/products': typeof DashboardProductsIndexRoute
   '/dashboard/settings': typeof DashboardSettingsIndexRoute
+  '/dashboard/users': typeof DashboardUsersIndexRoute
   '/dashboard/products/new': typeof DashboardProductsNewIndexRoute
 }
 
@@ -183,6 +201,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/products/': typeof DashboardProductsIndexRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexRoute
+  '/dashboard/users/': typeof DashboardUsersIndexRoute
   '/dashboard/products/new/': typeof DashboardProductsNewIndexRoute
 }
 
@@ -196,6 +215,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/products'
     | '/dashboard/settings'
+    | '/dashboard/users'
     | '/dashboard/products/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -205,6 +225,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/products'
     | '/dashboard/settings'
+    | '/dashboard/users'
     | '/dashboard/products/new'
   id:
     | '__root__'
@@ -215,6 +236,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/products/'
     | '/dashboard/settings/'
+    | '/dashboard/users/'
     | '/dashboard/products/new/'
   fileRoutesById: FileRoutesById
 }
@@ -258,6 +280,7 @@ export const routeTree = rootRoute
         "/dashboard/",
         "/dashboard/products/",
         "/dashboard/settings/",
+        "/dashboard/users/",
         "/dashboard/products/new/"
       ]
     },
@@ -277,6 +300,10 @@ export const routeTree = rootRoute
     },
     "/dashboard/settings/": {
       "filePath": "dashboard/settings/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/users/": {
+      "filePath": "dashboard/users/index.tsx",
       "parent": "/dashboard"
     },
     "/dashboard/products/new/": {

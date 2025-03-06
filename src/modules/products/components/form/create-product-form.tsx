@@ -43,7 +43,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { uploadFile } from "@/modules/core/services/file-api";
 import { z } from "zod";
 import { createProduct } from "../../services/medicine-api";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/modules/core/hooks/use-toast";
 
 export function CreateProductForm() {
   const [file, setFile] = useState<File | null>(null);

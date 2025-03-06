@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/modules/core/hooks/use-toast";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "./useAuth";
 import { useMutation } from "@tanstack/react-query";

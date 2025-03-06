@@ -4,25 +4,22 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useQuery } from '@tanstack/react-query'
 import { getMedicines } from '@/modules/products/services/medicine-api'
-import { CreateProductDialog } from '@/modules/products/components/dialog/create-product-dialog'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect } from 'react'
 import { IMetaDataFindAll } from '@/modules/core/interface/meta-interface'
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 import { Button } from '@/components/ui/button'
 import { Plus, Sheet } from 'lucide-react'
-import { set } from 'zod'
 import { Input } from '@/components/ui/input'
-import debounce from 'lodash/debounce'
+import { PaginationButtons } from '@/modules/core/components/buttons/pagination-buttons'
+import { useSearch } from '@/modules/core/hooks/use-search'
+import { usePagination } from '@/modules/core/hooks/use-pagination'
 
 export const Route = createFileRoute('/dashboard/products/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(4)
-  const [search, setSearch] = useState('')
-  const [totalPages, setTotalPages] = useState(0)
+  const { handleSearchChange, search } = useSearch()
+  const { setPage, totalPages, limit, page, setTotalPages } = usePagination()
 
   const { isPending, isError, error, data, isFetching, isPlaceholderData } = useQuery<{
     data: product[],
@@ -38,14 +35,7 @@ function RouteComponent() {
     }
   }, [data])
 
-  const debouncedSearch = useCallback(
-    debounce((value: string) => setSearch(value), 500),
-    []
-  )
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(event.target.value)
-  }
 
   return (
     <div className='flex-1 flex-col flex gap-4'>
@@ -72,23 +62,15 @@ function RouteComponent() {
           </CardDescription>
         </CardHeader>
         <CardContent className='flex-1 flex h-full flex-col gap-4'>
+
           <Input
             placeholder="Search"
             onChange={handleSearchChange}
             className="max-w-sm"
+
           />
-          <DataTable columns={columns} data={data?.data} isLoading={isPending} />
-          <Pagination>
-            <PaginationContent>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <PaginationItem key={index}>
-                  <PaginationLink onClick={() => setPage(index + 1)} isActive={index + 1 === page}>
-                    {index + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-            </PaginationContent>
-          </Pagination>
+          <DataTable columns={columns} data={data?.data || []} isLoading={isPending} />
+          <PaginationButtons page={page} setPage={setPage} totalPages={totalPages} />
         </CardContent>
       </Card>
     </div>)

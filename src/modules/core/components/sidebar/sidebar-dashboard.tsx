@@ -1,22 +1,16 @@
 import {
-    AudioWaveform,
     BookOpen,
     Bot,
     BriefcaseMedical,
-    Command,
-    Frame,
-    GalleryVerticalEnd,
-    Map,
-    PieChart,
+    MapPin,
     Settings2,
-    SquareTerminal,
+    User,
   } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { SideBarBody } from "./sidebar-body"
@@ -33,13 +27,41 @@ const data = {
       title: "Productos",
       url: "#",
       icon: BriefcaseMedical,
-      isActive: true,
+      isActive: false,
       items: [
         {
           title: "Ver todos",
           url: "/dashboard/products",
         },
       ],
+    },
+    {
+      title: "Sucursales",
+      url: "#",
+      icon: MapPin,
+      isActive: false,
+      items: [
+        {
+          title: "Ver todas",
+          url: "/dashboard/branches",
+        },
+        {
+          title: "Ver medicamentos",
+          url: "/dashboard/branches/medicines",
+        }
+      ],
+    },
+    {
+      title: "Usuarios",
+      url: "#",
+      icon: User,
+      isActive: false,
+      items: [
+        {
+          title: "Ver todos",
+          url: "/dashboard/users",
+        },
+      ]
     },
     {
       title: "Models",
@@ -107,33 +129,12 @@ const data = {
       ],
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
 }
 export function SidebarDashboard({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        {/* <TeamSwitcher teams={data.teams} /> */}
-      </SidebarHeader>
       <SidebarContent>
         <SideBarBody  items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         <SideBarUser user={data.user} />
