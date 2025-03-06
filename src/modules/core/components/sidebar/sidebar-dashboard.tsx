@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar"
 import { SideBarBody } from "./sidebar-body"
 import { SideBarUser } from "./sidebar-user"
-// This is sample data.
+
 const data = {
   user: {
     name: "shadcn",
@@ -36,16 +36,8 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Ver todos",
+          url: "/dashboard/products",
         },
       ],
     },

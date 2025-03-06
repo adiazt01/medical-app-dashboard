@@ -5,7 +5,7 @@ export const uploadFile = async (file: File, folder: string): Promise<IFileUploa
     const formData = new FormData();
     formData.append('file', file);
     formData.append('folder', folder);
-    const response = await post('/hub/file', formData, {
+    const response = await post('file', formData, {
       "Content-Type": "multipart/form-data",
     });
     return response as IFileUpload;

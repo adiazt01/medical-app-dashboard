@@ -6,13 +6,13 @@ export const getMedicines = async <T>(page = 1, limit = 10): Promise<{
     data: T[],
     meta: IMetaDataFindAll
 }> => {
-    const response = await get<{ data: T[], meta: IMetaDataFindAll }>("/hub/medicines?page=" + page + "&limit=" + limit);
+    const response = await get<{ data: T[], meta: IMetaDataFindAll }>("medicines?page=" + page + "&limit=" + limit);
     return response;
 }
 
 export const createProduct = async <T>(data: CreateProductWithFileId): Promise<T> => {
     console.log(data)
-    const response = await post<T>("/hub/medicines", data, {
+    const response = await post<T>("medicines", data, {
       "Content-Type": "application/json",
     });
     return response;

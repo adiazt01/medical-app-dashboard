@@ -5,8 +5,9 @@ import {jwtDecode} from 'jwt-decode';
 const TokenDataSchema = z.object({
   email: z.string(),
   sub: z.number(),
-  permission: z.string(),
-  userType: z.string(),
+  role: z.string(),
+  firstNames: z.string(),
+  lastNames: z.string(),
   exp: z.number(),
   iat: z.number(),
 });
@@ -25,6 +26,8 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const decodeAccessToken = (accessToken: string) => {
   const tokenData = TokenDataSchema.parse(jwtDecode<TokenData>(accessToken));
+
+  console.log('tokenData', tokenData);
   if (tokenData.exp * 1000 < Date.now()) {
     throw new Error('Token has expired');
   }
@@ -66,6 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (token) {
       try {
         const tokenData = decodeAccessToken(token);
+        console.log('tokenData', tokenData);
         if (tokenData.exp * 1000 < Date.now()) {
           clearTokens();
         } else {
