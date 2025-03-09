@@ -30,9 +30,13 @@ const data = {
       isActive: false,
       items: [
         {
-          title: "Ver todos",
+          title: "Todos",
           url: "/dashboard/products",
         },
+        {
+          title: "Por sucursal",
+          url: "/dashboard/products/branchs",
+        }
       ],
     },
     {
@@ -43,7 +47,7 @@ const data = {
       items: [
         {
           title: "Ver todas",
-          url: "/dashboard/branches",
+          url: "/dashboard/branchs",
         },
         {
           title: "Ver medicamentos",

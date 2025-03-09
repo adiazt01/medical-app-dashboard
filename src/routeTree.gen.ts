@@ -19,7 +19,9 @@ import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as DashboardUsersIndexImport } from './routes/dashboard/users/index'
 import { Route as DashboardSettingsIndexImport } from './routes/dashboard/settings/index'
 import { Route as DashboardProductsIndexImport } from './routes/dashboard/products/index'
+import { Route as DashboardBranchsIndexImport } from './routes/dashboard/branchs/index'
 import { Route as DashboardProductsNewIndexImport } from './routes/dashboard/products/new/index'
+import { Route as DashboardProductsBranchsIndexImport } from './routes/dashboard/products/branchs/index'
 
 // Create/Update Routes
 
@@ -71,11 +73,24 @@ const DashboardProductsIndexRoute = DashboardProductsIndexImport.update({
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 
+const DashboardBranchsIndexRoute = DashboardBranchsIndexImport.update({
+  id: '/branchs/',
+  path: '/branchs/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+
 const DashboardProductsNewIndexRoute = DashboardProductsNewIndexImport.update({
   id: '/products/new/',
   path: '/products/new/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+
+const DashboardProductsBranchsIndexRoute =
+  DashboardProductsBranchsIndexImport.update({
+    id: '/products/branchs/',
+    path: '/products/branchs/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -116,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexImport
       parentRoute: typeof DashboardRouteImport
     }
+    '/dashboard/branchs/': {
+      id: '/dashboard/branchs/'
+      path: '/branchs'
+      fullPath: '/dashboard/branchs'
+      preLoaderRoute: typeof DashboardBranchsIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
     '/dashboard/products/': {
       id: '/dashboard/products/'
       path: '/products'
@@ -137,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardUsersIndexImport
       parentRoute: typeof DashboardRouteImport
     }
+    '/dashboard/products/branchs/': {
+      id: '/dashboard/products/branchs/'
+      path: '/products/branchs'
+      fullPath: '/dashboard/products/branchs'
+      preLoaderRoute: typeof DashboardProductsBranchsIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
     '/dashboard/products/new/': {
       id: '/dashboard/products/new/'
       path: '/products/new'
@@ -151,17 +180,21 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardBranchsIndexRoute: typeof DashboardBranchsIndexRoute
   DashboardProductsIndexRoute: typeof DashboardProductsIndexRoute
   DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute
   DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
+  DashboardProductsBranchsIndexRoute: typeof DashboardProductsBranchsIndexRoute
   DashboardProductsNewIndexRoute: typeof DashboardProductsNewIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardBranchsIndexRoute: DashboardBranchsIndexRoute,
   DashboardProductsIndexRoute: DashboardProductsIndexRoute,
   DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,
   DashboardUsersIndexRoute: DashboardUsersIndexRoute,
+  DashboardProductsBranchsIndexRoute: DashboardProductsBranchsIndexRoute,
   DashboardProductsNewIndexRoute: DashboardProductsNewIndexRoute,
 }
 
@@ -175,9 +208,11 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/branchs': typeof DashboardBranchsIndexRoute
   '/dashboard/products': typeof DashboardProductsIndexRoute
   '/dashboard/settings': typeof DashboardSettingsIndexRoute
   '/dashboard/users': typeof DashboardUsersIndexRoute
+  '/dashboard/products/branchs': typeof DashboardProductsBranchsIndexRoute
   '/dashboard/products/new': typeof DashboardProductsNewIndexRoute
 }
 
@@ -186,9 +221,11 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/branchs': typeof DashboardBranchsIndexRoute
   '/dashboard/products': typeof DashboardProductsIndexRoute
   '/dashboard/settings': typeof DashboardSettingsIndexRoute
   '/dashboard/users': typeof DashboardUsersIndexRoute
+  '/dashboard/products/branchs': typeof DashboardProductsBranchsIndexRoute
   '/dashboard/products/new': typeof DashboardProductsNewIndexRoute
 }
 
@@ -199,9 +236,11 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/branchs/': typeof DashboardBranchsIndexRoute
   '/dashboard/products/': typeof DashboardProductsIndexRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
+  '/dashboard/products/branchs/': typeof DashboardProductsBranchsIndexRoute
   '/dashboard/products/new/': typeof DashboardProductsNewIndexRoute
 }
 
@@ -213,9 +252,11 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/'
+    | '/dashboard/branchs'
     | '/dashboard/products'
     | '/dashboard/settings'
     | '/dashboard/users'
+    | '/dashboard/products/branchs'
     | '/dashboard/products/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -223,9 +264,11 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/dashboard'
+    | '/dashboard/branchs'
     | '/dashboard/products'
     | '/dashboard/settings'
     | '/dashboard/users'
+    | '/dashboard/products/branchs'
     | '/dashboard/products/new'
   id:
     | '__root__'
@@ -234,9 +277,11 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/'
+    | '/dashboard/branchs/'
     | '/dashboard/products/'
     | '/dashboard/settings/'
     | '/dashboard/users/'
+    | '/dashboard/products/branchs/'
     | '/dashboard/products/new/'
   fileRoutesById: FileRoutesById
 }
@@ -278,9 +323,11 @@ export const routeTree = rootRoute
       "filePath": "dashboard/route.tsx",
       "children": [
         "/dashboard/",
+        "/dashboard/branchs/",
         "/dashboard/products/",
         "/dashboard/settings/",
         "/dashboard/users/",
+        "/dashboard/products/branchs/",
         "/dashboard/products/new/"
       ]
     },
@@ -294,6 +341,10 @@ export const routeTree = rootRoute
       "filePath": "dashboard/index.tsx",
       "parent": "/dashboard"
     },
+    "/dashboard/branchs/": {
+      "filePath": "dashboard/branchs/index.tsx",
+      "parent": "/dashboard"
+    },
     "/dashboard/products/": {
       "filePath": "dashboard/products/index.tsx",
       "parent": "/dashboard"
@@ -304,6 +355,10 @@ export const routeTree = rootRoute
     },
     "/dashboard/users/": {
       "filePath": "dashboard/users/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/products/branchs/": {
+      "filePath": "dashboard/products/branchs/index.tsx",
       "parent": "/dashboard"
     },
     "/dashboard/products/new/": {

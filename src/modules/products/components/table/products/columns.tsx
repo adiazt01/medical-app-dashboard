@@ -1,3 +1,4 @@
+import ImageColumn from "@/modules/core/components/ImageColumn"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import { ColumnDef } from "@tanstack/react-table"
 
@@ -21,7 +22,8 @@ export type product = {
     name: string
   },
   file: {
-    url: string
+    path: string
+    id: number
   }
 }
 
@@ -33,9 +35,9 @@ export const columns: ColumnDef<product>[] = [
       </p>
     </div>,
     cell: ({ row }) => {
-      return (<AspectRatio ratio={4/3} className="rounded-md border overflow-hidden max-w-20 max-h-20">
-        <img src={row.original.file.url} alt="product" className="mx-auto h-full overflow-hidden object-cover object-center" />
-      </AspectRatio>)
+      return (
+       <ImageColumn queryKey="products" file={row.original.file} alt={row.original.name} />  
+    )
     },
     accessorKey: 'file.url',
   },

@@ -1,5 +1,5 @@
-import { DataTable } from '@/modules/products/components/table/date-table'
-import { columns, product } from '@/modules/products/components/table/columns'
+import { DataTable } from '@/modules/products/components/table/products/date-table'
+import { columns, product } from '@/modules/products/components/table/products/columns'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useQuery } from '@tanstack/react-query'
@@ -25,7 +25,7 @@ function RouteComponent() {
     data: product[],
     meta: IMetaDataFindAll
   }>({
-    queryKey: ['medicines', page, search],
+    queryKey: ['products', page, search],
     queryFn: () => getMedicines(page, limit, search),
   })
 
