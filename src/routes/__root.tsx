@@ -9,7 +9,6 @@ interface IRouterContext {
 
 export const Route = createRootRouteWithContext<IRouterContext>()({
   component: RootComponent,
-
 })
 
 function RootComponent() {

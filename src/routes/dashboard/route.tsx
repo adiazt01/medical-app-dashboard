@@ -16,6 +16,7 @@ import { SidebarDashboard } from '@/modules/core/components/sidebar/sidebar-dash
 import { Separator } from '@radix-ui/react-separator'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import React from 'react'
+
 export const Route = createFileRoute('/dashboard')({
   beforeLoad: ({
     context: {
