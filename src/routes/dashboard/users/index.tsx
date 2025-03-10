@@ -82,7 +82,7 @@ function RouteComponent() {
             className="max-w-sm"
           />
           <Select onValueChange={(value) => setRole(value as Role)}>
-            <SelectTrigger>
+            <SelectTrigger className="max-w-sm mr-auto">
               <SelectValue placeholder="Selecciona un rol"/>
             </SelectTrigger>
             <SelectContent >

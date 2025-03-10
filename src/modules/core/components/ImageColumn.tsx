@@ -34,8 +34,8 @@ export default function ImageColumn({
     }
 
     return (
-        <AspectRatio ratio={6 / 1} className="rounded-md relative">
-            <img src={data?.publicUrl} alt="product" className="overflow-hidden mx-auto object-cover" />
+        <AspectRatio ratio={4 / 3} className="rounded-md mx-auto min-w-16 h-full overflow-hidden relative">
+            <img src={data?.publicUrl} alt="product" className="overflow-hidden h-full w-full mx-auto object-cover" />
         </AspectRatio>
     )
 }

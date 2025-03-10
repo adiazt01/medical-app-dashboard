@@ -35,8 +35,6 @@ function RouteComponent() {
     }
   }, [data])
 
-
-
   return (
     <div className='flex-1 flex-col flex gap-4'>
       <div className='flex justify-end gap-2 flex-row'>

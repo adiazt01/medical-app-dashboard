@@ -31,18 +31,25 @@ export type product = {
 export const columns: ColumnDef<product>[] = [
   {
     header: () => <div>
-      <p className="mr-2">
+      <p>
         Imagen
       </p>
     </div>,
     cell: ({ row }) => {
       return (
-        <>
-         <ImageColumn queryKey="products" file={row.original.medicine.file} alt={row.original.medicine.name} />
-        </>
+        <ImageColumn queryKey="products" file={row.original.medicine.file} alt={row.original.medicine.name} />
       )
     },
     accessorKey: 'file.url',
+  },
+  {
+    header: () => <div>
+      Nombre
+    </div>,
+    accessorKey: 'name',
+    cell: ({ row }) => {
+      return <div className="truncate">{row.original.medicine.name}</div>
+    }
   },
   {
     header: () => <div>
@@ -59,9 +66,25 @@ export const columns: ColumnDef<product>[] = [
     </div>,
     accessorKey: 'name',
     cell: ({ row }) => {
-    
       return <div className="truncate">{row.original.branch.name}</div>
     }
   },
+  {
+    header: () => <div>
+      Precio
+    </div>,
+    cell: ({ row }) => {
+      return <div className="truncate">{row.original.medicine.price}</div>
+    },
+    accessorKey: 'price',
+  },
+  {
+    header: () => <div>
+      Creado
+    </div>,
+    accessorKey: 'createdAt',
+    cell: ({ row }) => {
+      return <div className="truncate">{row.original.createdAt}</div>
+    }
+  }
 ]
-
